@@ -18,8 +18,6 @@ const styles = StyleSheet.create({
   },
   nameInput: {
     height: 40,
-    borderWidth: 2,
-    borderColor: 'black',
     margin: 20,
     padding: 5,
   },

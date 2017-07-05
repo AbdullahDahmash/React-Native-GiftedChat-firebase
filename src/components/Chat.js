@@ -6,6 +6,7 @@ import {
 import { 
   GiftedChat,
 } from 'react-native-gifted-chat';
+import Backend from '../Backend';
 
 class Chat extends React.Component {
 
@@ -13,18 +14,37 @@ class Chat extends React.Component {
     messages: []
   };
 
+  componentWillMount() {
+
+  }
+
   render() {
     return (
       <GiftedChat 
         messages={this.state.messages}
         onSend={(message) => {
-          // send message to backend
+          Backend.sendMessage(message);
         }}
         user={{
-          _id: 1,
+          _id: Backend.getUid(),
+          name: this.props.name,
         }}
       />
-    )
+    );
+  }
+
+  componentDidMount() {
+    Backend.loadMessages((message) => {
+      this.setState((previousState) => {
+        return {
+          messages: GiftedChat.append(previousState.messages, message),
+        };
+      });
+    });
+  }
+
+  componentWillUnmount() {
+    Backend.closeChat();
   }
 }
 
